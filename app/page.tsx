@@ -12,7 +12,7 @@ export default function Home() {
     return (
         <div className="container mx-auto p-4">
             <div className="text-center pb-4">
-                <h1 className="text-2xl font-bold pb-2">Team Scouting</h1>
+                <h1 className="text-2xl font-bold pb-2">Camber Scouting</h1>
                 <Separator />
             </div>
         </div>
