@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { CreateMatchForm } from "@/components/create-match-form";
 
 export default async function Team({
     params,
@@ -23,7 +22,6 @@ export default async function Team({
             <h1>
                 Team {team.name} | {team.id}
             </h1>
-            <CreateMatchForm teamId={team.id} />
         </div>
     );
 }
