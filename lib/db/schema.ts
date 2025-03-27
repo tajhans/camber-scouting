@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import {
+    pgTable,
+    text,
+    timestamp,
+    boolean,
+    integer,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
@@ -47,4 +53,10 @@ export const verification = pgTable("verification", {
     expiresAt: timestamp("expires_at").notNull(),
     createdAt: timestamp("created_at"),
     updatedAt: timestamp("updated_at"),
+});
+
+export const team = pgTable("team", {
+    id: integer("id").primaryKey(),
+    name: text("name"),
+    matches: text("matches").array().default([]),
 });
