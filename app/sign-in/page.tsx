@@ -14,172 +14,157 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 
 const signInSchema = z.object({
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(1, "Password is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
 });
 
 async function fetcher(
-    url: string,
-    { arg }: { arg: z.infer<typeof signInSchema> },
+  url: string,
+  { arg }: { arg: z.infer<typeof signInSchema> },
 ) {
-    const response = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(arg),
-    });
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(arg),
+  });
 
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Authentication failed");
-    }
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Authentication failed");
+  }
 
-    return response.json();
+  return response.json();
 }
 
 export default function SignIn() {
-    const router = useRouter();
+  const router = useRouter();
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { data: session, isPending } = useSession();
+  const { data: session, isPending } = useSession();
 
-    const { trigger, isMutating } = useSWRMutation("/api/sign-in", fetcher);
+  const { trigger, isMutating } = useSWRMutation("/api/sign-in", fetcher);
 
-    const form = useForm<z.infer<typeof signInSchema>>({
-        resolver: zodResolver(signInSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
-    });
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-    async function onSubmit(values: z.infer<typeof signInSchema>) {
-        setIsSubmitting(true);
+  async function onSubmit(values: z.infer<typeof signInSchema>) {
+    setIsSubmitting(true);
 
-        const toastId = toast.loading("Signing in...");
+    const toastId = toast.loading("Signing in...");
 
-        try {
-            await trigger(values);
+    try {
+      await trigger(values);
 
-            toast.success("Signed in successfully!", { id: toastId });
+      toast.success("Signed in successfully!", { id: toastId });
 
-            router.refresh();
-            router.push("/");
-        } catch (error) {
-            toast.error(
-                error instanceof Error
-                    ? error.message
-                    : "Authentication failed",
-                { id: toastId },
-            );
-        }
-
-        setIsSubmitting(false);
+      router.refresh();
+      router.push("/");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Authentication failed",
+        { id: toastId },
+      );
     }
 
-    useEffect(() => {
-        if (session && !isPending) {
-            router.push("/");
-        }
-    }, [session, isPending, router]);
+    setIsSubmitting(false);
+  }
 
-    if (isPending) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Loader2 className="h-6 w-6 animate-spin" />
-            </div>
-        );
+  useEffect(() => {
+    if (session && !isPending) {
+      router.push("/");
     }
+  }, [session, isPending, router]);
 
-    if (!session) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="w-full max-w-md p-8">
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-8"
-                        >
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="m@example.com"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Enter your email address
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Password</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="********"
-                                                type="password"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Enter your password
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting || isMutating}
-                                className="w-full"
-                            >
-                                {isSubmitting || isMutating ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Signing in...
-                                    </>
-                                ) : (
-                                    "Sign In"
-                                )}
-                            </Button>
-                        </form>
-                    </Form>
-                    <div className="mt-4 text-center">
-                        <p>
-                            Don&apos;t have an account?{" "}
-                            <Link
-                                href="/sign-up"
-                                className="text-blue-600 hover:underline"
-                            >
-                                Sign up
-                            </Link>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="w-full max-w-md p-8">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="m@example.com" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter your email address</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="********"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>Enter your password</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                disabled={isSubmitting || isMutating}
+                className="w-full"
+              >
+                {isSubmitting || isMutating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </form>
+          </Form>
+          <div className="mt-4 text-center">
+            <p>
+              Don&apos;t have an account?{" "}
+              <Link href="/sign-up" className="text-blue-600 hover:underline">
+                Sign up
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
