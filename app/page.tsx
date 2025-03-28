@@ -12,9 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { PlusCircle, Users, BarChart, ClipboardList } from "lucide-react";
-import Link from "next/link";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -31,14 +28,6 @@ export default async function Home() {
           <p className="text-lg text-muted-foreground">
             A powerful tool for FRC team scouting and data analysis.
           </p>
-          <div className="flex justify-center gap-4 pt-2">
-            <Button asChild size="lg">
-              <Link href="/login">Sign In</Link>
-            </Button>
-            <Button variant="outline" asChild size="lg">
-              <Link href="/register">Register</Link>
-            </Button>
-          </div>
         </div>
       </div>
     );

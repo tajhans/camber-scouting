@@ -25,7 +25,7 @@ export function Navbar() {
               href="/"
               className="flex items-center gap-2 text-xl font-bold text-primary"
             >
-              <span className="text-2xl text-bold">Camber Scouting</span>
+              <span className="text-3xl text-bold">Camber Scouting</span>
             </Link>
           </div>
           <div>
