@@ -57,7 +57,6 @@ export function CreateTeamForm() {
     const form = useForm<z.infer<typeof createTeamSchema>>({
         resolver: zodResolver(createTeamSchema),
         defaultValues: {
-            id: 0,
             name: "",
         },
     });
