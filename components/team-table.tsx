@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import useSWR from "swr";
 import Link from "next/link";
-
-import { Input } from "@/components/ui/input";
+import { PlusCircle, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -15,53 +14,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 interface Team {
   id: number;
   name: string;
-}
-
-interface TeamResponse {
-  teams: Team[];
-  totalPages: number;
+  matchCount: number;
+  averageScore: number;
+  lastUpdated: string;
 }
 
 export function TeamTable() {
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-
-  const { data, error, isLoading } = useSWR<TeamResponse>(
-    `/api/team?page=${page}&search=${debouncedSearch}`,
+  const { data, error, isLoading } = useSWR<{ teams: Team[] }>(
+    "/api/team",
     fetcher,
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = (value: string) => {
-    setSearch(value);
-    setTimeout(() => {
-      setDebouncedSearch(value);
-      setPage(1);
-    }, 300);
-  };
+  const filteredTeams = data?.teams?.filter(
+    (team) =>
+      team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      team.id.toString().includes(searchQuery),
+  );
 
   if (error) return <div>Failed to load teams</div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Input
-          placeholder="Search teams by number or name..."
-          value={search}
-          onChange={(e) => handleSearch(e.target.value)}
-          className="max-w-sm"
-        />
-        <div className="text-sm text-muted-foreground">
-          {!isLoading &&
-            data?.teams &&
-            data.teams.length > 0 &&
-            `Showing ${data.teams.length} teams`}
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search teams..."
+            className="pl-8"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
       </div>
 
@@ -69,8 +59,8 @@ export function TeamTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Team Number</TableHead>
-              <TableHead>Team Name</TableHead>
+              <TableHead className="w-[80px]">Team #</TableHead>
+              <TableHead>Name</TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -78,25 +68,23 @@ export function TeamTable() {
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell>
-                    <Skeleton className="h-5 w-16" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-5 w-32" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-9 w-20" />
-                  </TableCell>
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <TableCell key={j}>
+                      <Skeleton className="h-5 w-full" />
+                    </TableCell>
+                  ))}
                 </TableRow>
               ))
-            ) : data?.teams.length === 0 ? (
+            ) : !filteredTeams || filteredTeams.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={3} className="h-24 text-center">
-                  No teams found.
+                <TableCell colSpan={5} className="h-24 text-center">
+                  {searchQuery
+                    ? "No teams match your search."
+                    : "No teams added yet."}
                 </TableCell>
               </TableRow>
             ) : (
-              data?.teams.map((team) => (
+              filteredTeams.map((team) => (
                 <TableRow key={team.id}>
                   <TableCell className="font-medium">{team.id}</TableCell>
                   <TableCell>{team.name}</TableCell>
@@ -112,30 +100,6 @@ export function TeamTable() {
             )}
           </TableBody>
         </Table>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Page {page} of {data?.totalPages || 1}
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1 || isLoading}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage(page + 1)}
-            disabled={page === data?.totalPages || isLoading}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     </div>
   );

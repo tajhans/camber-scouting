@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -70,8 +69,8 @@ export function CreateTeamForm() {
       await trigger(values);
 
       toast.success("Team created successfully!", { id: toastId });
-
-      router.push(`/team/${values.id}`);
+      form.reset();
+      router.refresh();
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to create team",
@@ -84,7 +83,7 @@ export function CreateTeamForm() {
 
   if (isPending) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-24">
         <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     );
@@ -95,75 +94,60 @@ export function CreateTeamForm() {
   }
 
   return (
-    <div className="max-w-sm mx-auto">
-      <div className="rounded-lg border p-6 space-y-6">
-        <div className="space-y-2">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Add New Team
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Add a new FRC team to the scouting system
-          </p>
-        </div>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Team Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="9658"
-                      {...field}
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.value === "" ? "" : parseInt(e.target.value),
-                        )
-                      }
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Enter the team&apos;s FRC number
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Team Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Camber" {...field} />
-                  </FormControl>
-                  <FormDescription>Enter the team&apos;s name</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              disabled={isSubmitting || isMutating}
-              className="w-full pt-2"
-            >
-              {isSubmitting || isMutating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating team...
-                </>
-              ) : (
-                "Add Team"
-              )}
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Team Number</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="9658"
+                  {...field}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === ""
+                        ? ""
+                        : Number.parseInt(e.target.value),
+                    )
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Team Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Camber" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          disabled={isSubmitting || isMutating}
+          className="w-full"
+        >
+          {isSubmitting || isMutating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creating team...
+            </>
+          ) : (
+            "Add Team"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }
