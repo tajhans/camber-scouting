@@ -13,7 +13,7 @@ export default async function Team({
   const cookieStore = await cookies();
   const authCookie = cookieStore.get("better-auth.session_token");
 
-  const data = await fetch(`http://100.119.141.108:3000/api/team/${id}`, {
+  const data = await fetch(`${process.env.BASE_URL}/api/team/${id}`, {
     headers: {
       Cookie: `better-auth.session_token=${authCookie?.value}`,
     },
