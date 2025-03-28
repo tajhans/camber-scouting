@@ -57,12 +57,14 @@ A modern web application for FRC teams to collect and analyze match scouting dat
 ### Installation
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/your-username/camber-scouting.git
 cd camber-scouting
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 # or
@@ -72,11 +74,13 @@ yarn install
 3. Set up environment variables (see [Environment Variables](#environment-variables))
 
 4. Run database migrations
+
 ```bash
 npm run db:migrate
 ```
 
 5. Start the development server
+
 ```bash
 npm run dev
 ```
