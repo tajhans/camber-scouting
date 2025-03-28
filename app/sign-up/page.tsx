@@ -76,6 +76,7 @@ export default function SignUp() {
 
             toast.success("Account created successfully!", { id: toastId });
 
+            router.refresh()
             router.push("/");
         } catch (error) {
             toast.error(
@@ -105,96 +106,98 @@ export default function SignUp() {
 
     if (!session) {
         return (
-            <div>
-                <Form {...form}>
-                    <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-8"
-                    >
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Name</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="John Doe"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your name.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="m@example.com"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your email.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="********"
-                                            type="password"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your password.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting || isMutating}
-                            className="w-full"
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="w-full max-w-md p-8">
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="space-y-8"
                         >
-                            {isSubmitting || isMutating ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Creating account...
-                                </>
-                            ) : (
-                                "Sign Up"
-                            )}
-                        </Button>
-                    </form>
-                </Form>
-                <div className="mt-4 text-center">
-                    <p>
-                        Already have an account?{" "}
-                        <Link
-                            href="/sign-in"
-                            className="text-blue-600 hover:underline"
-                        >
-                            Sign In
-                        </Link>
-                    </p>
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Name</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="John Doe"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            This is your name.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="m@example.com"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            This is your email.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="********"
+                                                type="password"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            This is your password.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting || isMutating}
+                                className="w-full"
+                            >
+                                {isSubmitting || isMutating ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Creating account...
+                                    </>
+                                ) : (
+                                    "Sign Up"
+                                )}
+                            </Button>
+                        </form>
+                    </Form>
+                    <div className="mt-4 text-center">
+                        <p>
+                            Already have an account?{" "}
+                            <Link
+                                href="/sign-in"
+                                className="text-blue-600 hover:underline"
+                            >
+                                Sign In
+                            </Link>
+                        </p>
+                    </div>
                 </div>
             </div>
         );

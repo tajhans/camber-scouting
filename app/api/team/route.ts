@@ -27,6 +27,7 @@ export async function GET(request: Request) {
             .where(
                 sql`CAST(id AS TEXT) LIKE ${`%${search}%`} OR name LIKE ${`%${search}%`}`,
             )
+            .orderBy(sql`CAST(id AS INTEGER)`)
             .limit(limit)
             .offset(offset);
 

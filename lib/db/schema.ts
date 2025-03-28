@@ -60,3 +60,28 @@ export const team = pgTable("team", {
     name: text("name"),
     matches: text("matches").array().default([]),
 });
+
+export const match = pgTable("match", {
+    matchNumber: integer("match_number").notNull(),
+    teamId: integer("team_id").references(() => team.id),
+    alliance: text("alliance").notNull(),
+    position: integer("position").notNull(),
+    redAlliance: integer("red_alliance").array().notNull(),
+    blueAlliance: integer("blue_alliance").array().notNull(),
+    coralL1: integer("coral_l1").default(0),
+    coralL2: integer("coral_l2").default(0),
+    coralL3: integer("coral_l3").default(0),
+    coralL4: integer("coral_l4").default(0),
+    leftInAuton: boolean("left_in_auton").default(false),
+    pointsScoredInAuton: boolean("points_scored_in_auton").default(false),
+    algaeInProcessor: integer("algae_in_processor").default(0),
+    algaeTakenOff: integer("algae_taken_off").default(0),
+    algaeInNet: integer("algae_in_net").default(0),
+    humanPlayer: boolean("human_player").default(false),
+    groundIntake: boolean("ground_intake").default(false),
+    droppedCoral: integer("dropped_coral").default(0),
+    droppedAlgae: integer("dropped_algae").default(0),
+    penaltyPoints: integer("penalty_points").default(0),
+    yellowCards: integer("yellow_cards").default(0),
+    createdAt: timestamp("created_at").defaultNow(),
+});
