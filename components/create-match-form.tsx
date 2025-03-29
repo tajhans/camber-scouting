@@ -83,7 +83,7 @@ export function CreateMatchForm({ teamId }: { teamId: number }) {
     const newRedAlliance = [0, 0, 0];
     const newBlueAlliance = [0, 0, 0];
 
-    const positionIndex = parseInt(position) - 1;
+    const positionIndex = Number.parseInt(position) - 1;
 
     if (alliance === "red") {
       newRedAlliance[positionIndex] = teamId;
@@ -134,7 +134,7 @@ export function CreateMatchForm({ teamId }: { teamId: number }) {
                           field.onChange(
                             e.target.value === ""
                               ? 0
-                              : parseInt(e.target.value),
+                              : Number.parseInt(e.target.value),
                           )
                         }
                       />
@@ -216,7 +216,7 @@ export function CreateMatchForm({ teamId }: { teamId: number }) {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-lg border border-red-200 bg-red-50/50 p-4 space-y-4">
+            <div className="rounded-lg border border-red-200 bg-red-50/50 p-4 space-y-4 shadow-sm">
               <h2 className="text-lg font-semibold text-red-900">
                 Red Alliance
               </h2>
@@ -237,18 +237,18 @@ export function CreateMatchForm({ teamId }: { teamId: number }) {
                             placeholder={`Team Number`}
                             className={`${
                               alliance === "red" &&
-                              index === parseInt(position) - 1
+                              index === Number.parseInt(position) - 1
                                 ? "border-red-500 bg-red-100"
                                 : ""
                             }`}
                             {...field}
                             disabled={
                               alliance === "red" &&
-                              index === parseInt(position) - 1
+                              index === Number.parseInt(position) - 1
                             }
                             value={field.value || ""}
                             onChange={(e) =>
-                              field.onChange(parseInt(e.target.value))
+                              field.onChange(Number.parseInt(e.target.value))
                             }
                           />
                         </FormControl>
@@ -260,7 +260,7 @@ export function CreateMatchForm({ teamId }: { teamId: number }) {
               </div>
             </div>
 
-            <div className="rounded-lg border border-blue-200 bg-blue-50/50 p-4 space-y-4">
+            <div className="rounded-lg border border-blue-200 bg-blue-50/50 p-4 space-y-4 shadow-sm">
               <h2 className="text-lg font-semibold text-blue-900">
                 Blue Alliance
               </h2>
@@ -281,18 +281,18 @@ export function CreateMatchForm({ teamId }: { teamId: number }) {
                             placeholder={`Team Number`}
                             className={`${
                               alliance === "blue" &&
-                              index === parseInt(position) - 1
+                              index === Number.parseInt(position) - 1
                                 ? "border-blue-500 bg-blue-100"
                                 : ""
                             }`}
                             {...field}
                             disabled={
                               alliance === "blue" &&
-                              index === parseInt(position) - 1
+                              index === Number.parseInt(position) - 1
                             }
                             value={field.value || ""}
                             onChange={(e) =>
-                              field.onChange(parseInt(e.target.value))
+                              field.onChange(Number.parseInt(e.target.value))
                             }
                           />
                         </FormControl>

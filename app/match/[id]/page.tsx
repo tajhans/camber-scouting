@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
-import { MatchForm } from "@/components/match-scouting-form";
+import { MatchSummary } from "@/components/match-summary";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default async function MatchPage({
+export default async function Match({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -35,13 +35,17 @@ export default async function MatchPage({
 
   const match = await data.json();
 
-  http: return (
+  return (
     <div className="container mx-auto p-4">
       <div className="text-center pb-4">
         <h1 className="text-2xl font-bold pb-2">Match Scouting</h1>
         <Separator />
       </div>
-      <MatchForm teamId={match.teamId} matchId={parseInt(id)} />
+      <MatchSummary
+        teamId={match.teamId}
+        matchId={Number.parseInt(id)}
+        matchData={match}
+      />
     </div>
   );
 }

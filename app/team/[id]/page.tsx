@@ -46,10 +46,10 @@ export default async function Team({
       </div>
       <div className="flex flex-col items-center min-h-screen -w-[700px]">
         <div className="mt-4">
-          <CreateMatchForm teamId={team.id} />
+          <MatchTable teamId={parseInt(id)} />
         </div>
         <div className="mt-4">
-          <MatchTable teamId={parseInt(id)} />
+          <CreateMatchForm teamId={team.id} />
         </div>
       </div>
     </div>
