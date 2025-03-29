@@ -13,7 +13,7 @@ export default async function Team({
   const cookieStore = await cookies();
   const authCookie =
     cookieStore.get("better-auth.session_token") ||
-    cookieStore.get("_Secure-better-auth.session_token");
+    cookieStore.get("__Secure-better-auth.session_token");
 
   const data = await fetch(`${process.env.BASE_URL}/api/team/${id}`, {
     headers: {
